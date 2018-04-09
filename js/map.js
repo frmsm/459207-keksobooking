@@ -7,8 +7,6 @@ var TITLES = ['Большая уютная квартира', 'Маленька�
   'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
   'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 
-var TYPES = ['palace', 'flat', 'house', 'bungalo'];
-
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
 var CHECKS = ['12:00', '13:00', '14:00'];
@@ -39,11 +37,11 @@ var getArrayElement = function (arrElement) {
 
 var getAvatar = function () {
   return getArrayElement(AVATARS);
-}
+};
 
 var getTitle = function () {
   return getArrayElement(TITLES);
-}
+};
 
 var getCheckTime = function () {
   return CHECKS[getRandom(0, CHECKS.length - 1)];
@@ -59,7 +57,7 @@ var getType = function (title) {
   } else if (title === 'Уютное бунгало далеко от моря'
     || title === 'Неуютное бунгало по колено в воде0') {
     return 'bungalo';
-  };
+  }
   return 'none';
 };
 
