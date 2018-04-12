@@ -184,15 +184,87 @@ var getMapOfferFragment = function () {
       'px; top: ' + (OFFERS[i].location.y - pinFragment.children[0].height) + 'px;';
     pinFragment.children[0].src = OFFERS[i].author.avatar;
     pinFragment.children[0].alt = OFFERS[i].offer.title;
+    cardFragment.style.display = 'none';
+    pinFragment.style.display = 'none';
     setupFragment.appendChild(cardFragment);
     setupFragment.appendChild(pinFragment);
   }
+
   return setupFragment;
 };
+
+var PIN_HEIGHT = 84;
+var PIN_WIDTH = 62;
 
 var mapPins = document.querySelector('.map__pins');
 var documentBlock = getMapOfferFragment();
 mapPins.appendChild(documentBlock);
 
 var mapBlock = document.querySelector('.map');
-mapBlock.classList.remove('map--faded');
+var mainPin = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var addressInForm = document.querySelector('#address');
+
+var onMouseUp = function () {
+  mapBlock.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  displayMapPins();
+  fillInput(addressInForm);
+};
+
+var fillInput = function (inputName) {
+  inputName.value = getMainPinLocation();
+};
+
+var getMainPinLocation = function () {
+  return (parseInt(mainPin.style.left, 10) + PIN_WIDTH) + ', '
+    + (parseInt(mainPin.style.top, 10) + PIN_HEIGHT);
+};
+
+var displayMapPins = function () {
+  var mapPinsArr = document.querySelectorAll('.map__pin');
+  for (var i = 1; i < mapPinsArr.length; i++) {
+    mapPinsArr[i].style.display = 'block';
+  }
+};
+
+var currentPopUp;
+
+var hidePopUp = function () {
+  if (currentPopUp) {
+    currentPopUp.style.display = 'none';
+  }
+};
+
+var onMapPinClick = function (e) {
+  var target = e.target;
+  if (target.tagName === 'IMG' || target.className === 'map__pin') {
+    if (target.className === 'map__pin map__pin--main'
+      || target.parentNode.className === 'map__pin map__pin--main') {
+      return;
+    }
+    if (target.previousSibling) {
+      hidePopUp();
+      target.previousSibling.style.display = 'block';
+      currentPopUp = target.previousSibling;
+    } else {
+      hidePopUp();
+      target.parentNode.previousSibling.style.display = 'block';
+      currentPopUp = target.parentNode.previousSibling;
+    }
+  }
+};
+
+var onPopUpCloseClick = function (e) {
+  var target = e.target;
+  if (target.className !== 'popup__close') {
+    return;
+  }
+  target.parentNode.style.display = 'none';
+};
+
+mainPin.addEventListener('mouseup', onMouseUp);
+mapPins.addEventListener('click', onMapPinClick);
+mapPins.addEventListener('click', onPopUpCloseClick);
+
+
