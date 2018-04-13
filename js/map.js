@@ -253,6 +253,7 @@ var onMapPinClick = function (e) {
       currentPopUp = target.parentNode.previousSibling;
     }
   }
+  mapPins.addEventListener('click', onPopUpCloseClick);
 };
 
 var onPopUpCloseClick = function (e) {
@@ -260,11 +261,11 @@ var onPopUpCloseClick = function (e) {
   if (target.className !== 'popup__close') {
     return;
   }
+  mapPins.removeEventListener('click', onPopUpCloseClick);
   target.parentNode.style.display = 'none';
 };
 
 mainPin.addEventListener('mouseup', onMouseUp);
 mapPins.addEventListener('click', onMapPinClick);
-mapPins.addEventListener('click', onPopUpCloseClick);
 
 
