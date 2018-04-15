@@ -356,9 +356,7 @@ var setCheckOutTime = function () {
   }
 };
 
-var sendForm = function (e) {
-  e.preventDefault();
-
+var sendForm = function () {
   var features = [];
 
   for (var i = 0; i < featuresField.length; i++) {
