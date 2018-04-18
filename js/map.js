@@ -204,20 +204,9 @@ var mapBlock = document.querySelector('.map');
 var mainPin = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 
-var onMouseUp = function () {
-  mapBlock.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
-  displayMapPins();
-  fillInput(addressField);
-};
-
-var fillInput = function (inputName) {
-  inputName.value = getMainPinLocation();
-};
-
 var getMainPinLocation = function () {
-  return (parseInt(mainPin.style.left, 10) + PIN_WIDTH) + ', '
-    + (parseInt(mainPin.style.top, 10) + PIN_HEIGHT);
+  return (mainPin.offsetLeft + PIN_WIDTH / 2) + ', '
+    + (mainPin.offsetTop + PIN_HEIGHT);
 };
 
 var displayMapPins = function () {
@@ -264,8 +253,77 @@ var onPopUpCloseClick = function (e) {
   target.parentNode.style.display = 'none';
 };
 
-mainPin.addEventListener('mouseup', onMouseUp);
 mapPins.addEventListener('click', onMapPinClick);
+
+// Обработка движения главного пина
+var onMouseDown = function (e) {
+  e.preventDefault();
+
+  mapBlock.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+
+  var startCoords = {
+    x: e.clientX,
+    y: e.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    if ((mainPin.offsetTop - shift.y + PIN_HEIGHT) > 500) {
+      mainPin.style.top = (500 - PIN_HEIGHT) + 'px';
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      mapBlock.removeEventListener('mousemove', onMouseMove);
+    } else if ((mainPin.offsetTop - shift.y + PIN_HEIGHT) < 150) {
+      mainPin.style.top = (150 - PIN_HEIGHT) + 'px';
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      mapBlock.removeEventListener('mousemove', onMouseMove);
+    } else if ((mainPin.offsetLeft - shift.x + PIN_WIDTH / 2) > 900) {
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+      mainPin.style.left = (900 - PIN_WIDTH / 2) + 'px';
+      mapBlock.removeEventListener('mousemove', onMouseMove);
+    } else if ((mainPin.offsetLeft - shift.x + PIN_WIDTH / 2) < 300) {
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+      mainPin.style.left = (300 - PIN_WIDTH / 2) + 'px';
+      mapBlock.removeEventListener('mousemove', onMouseMove);
+    } else {
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+    }
+  };
+
+  var onWheelMove = function (wheelEvt) {
+    wheelEvt.preventDefault();
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    displayMapPins();
+    addressField.value = getMainPinLocation();
+
+    document.removeEventListener('mousewheel', onWheelMove);
+    mapBlock.removeEventListener('mousemove', onMouseMove);
+    mapBlock.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousewheel', onWheelMove);
+  mapBlock.addEventListener('mousemove', onMouseMove);
+  mapBlock.addEventListener('mouseup', onMouseUp);
+};
+
+mainPin.addEventListener('mousedown', onMouseDown);
+
 
 // Валидация
 var setTitleValidation = function () {
