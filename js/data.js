@@ -61,30 +61,45 @@
   };
 
   var getType = function (title) { // Получение типа жилища
-    if (title === 'Большая уютная квартира' || title === 'Маленькая неуютная квартира') {
-      return 'flat';
-    } else if (title === 'Огромный прекрасный дворец' || title === 'Маленький ужасный дворец') {
-      return 'palace';
-    } else if (title === 'Красивый гостевой домик' || title === 'Некрасивый негостеприимный домик') {
-      return 'house';
-    } else if (title === 'Уютное бунгало далеко от моря'
-      || title === 'Неуютное бунгало по колено в воде') {
-      return 'bungalo';
+    switch (title) {
+      case 'Большая уютная квартира':
+      case 'Маленькая неуютная квартира':
+        return 'flat';
+
+      case 'Огромный прекрасный дворец':
+      case 'Маленький ужасный дворец':
+        return 'palace';
+
+      case 'Красивый гостевой домик':
+      case 'Некрасивый негостеприимный домик':
+        return 'house';
+
+      case 'Уютное бунгало далеко от моря':
+      case 'Неуютное бунгало по колено в воде':
+        return 'bungalo';
+
+      default:
+        return 'none';
     }
-    return 'none';
   };
 
   var getPrice = function (type) { // Получить цену !!!переделать есть функция получения цены
-    if (type === 'flat') {
-      return getRandom(1000, 1000000);
-    } else if (type === 'palace') {
-      return getRandom(10000, 1000000);
-    } else if (type === 'bungalo') {
-      return getRandom(0, 1000000);
-    } else if (type === 'house') {
-      return getRandom(5000, 1000000);
+    switch (type) {
+      case 'flat':
+        return getRandom(1000, 1000000);
+
+      case 'palace':
+        return getRandom(10000, 1000000);
+
+      case 'bungalo':
+        return getRandom(0, 1000000);
+
+      case 'house':
+        return getRandom(5000, 1000000);
+
+      default:
+        return false;
     }
-    return false;
   };
 
   // Максимальное и минимальное расположение точки на карте
@@ -118,16 +133,22 @@
   };
 
   var getCapacity = function (rooms) {
-    if (rooms === 1) {
-      return CAPACITY[0];
-    } else if (rooms === 2) {
-      return CAPACITY[(getRandom(0, 1))];
-    } else if (rooms === 3) {
-      return CAPACITY[(getRandom(0, 2))];
-    } else if (rooms === 100) {
-      return CAPACITY[3];
+    switch (rooms) {
+      case 1:
+        return CAPACITY[0];
+
+      case 2:
+        return CAPACITY[(getRandom(0, 1))];
+
+      case 3:
+        return CAPACITY[(getRandom(0, 2))];
+
+      case 100:
+        return 'не для гостей';
+
+      default:
+        return false;
     }
-    return false;
   };
 
   var MAX_PINS = 7; // Максимальное количество пинов
@@ -177,8 +198,15 @@
   };
   addOffers();
 
-  window.data = {
-    getOffers: OFFERS
+
+  var onError = function () {
+    window.card.makeCard(OFFERS);
   };
+
+  var onSuccess = function (data) {
+    window.card.makeCard(data);
+  };
+
+  window.backend.load('https://js.dump.academy/keksobooking/data', onSuccess, onError);
 })();
 

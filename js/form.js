@@ -7,10 +7,6 @@
     titleField.maxLength = '100';
   };
 
-  var setAddressValidation = function () {
-    addressField.disabled = true;
-  };
-
   var setPriceField = function () {
     priceField.required = true;
     priceField.max = '1000000';
@@ -22,14 +18,19 @@
   };
 
   var setTypeValidation = function () { // валидация цены и типа
-    if (typeField.children[0].selected) {
-      changePriceField('1000');
-    } else if (typeField.children[1].selected) {
-      changePriceField('0');
-    } else if (typeField.children[2].selected) {
-      changePriceField('5000');
-    } else if (typeField.children[3].selected) {
-      changePriceField('10000');
+    switch (true) {
+      case typeField.children[0].selected:
+        changePriceField('1000');
+        break;
+      case typeField.children[1].selected:
+        changePriceField('0');
+        break;
+      case typeField.children[2].selected:
+        changePriceField('5000');
+        break;
+      case typeField.children[3].selected:
+        changePriceField('10000');
+        break;
     }
   };
 
@@ -46,18 +47,23 @@
   };
 
   var setCapacityValidation = function () {
-    if (roomField.children[0].selected) {
-      setCapacityDisabledField([true, true, false, true]);
-      setCapacitySelectedField([false, false, true, false]);
-    } else if (roomField.children[1].selected) {
-      setCapacityDisabledField([true, false, false, true]);
-      setCapacitySelectedField([false, true, false, false]);
-    } else if (roomField.children[2].selected) {
-      setCapacityDisabledField([false, false, false, true]);
-      setCapacitySelectedField([true, false, false, false]);
-    } else if (roomField.children[3].selected) {
-      setCapacityDisabledField([true, true, true, false]);
-      setCapacitySelectedField([false, false, false, true]);
+    switch (true) {
+      case roomField.children[0].selected:
+        setCapacityDisabledField([true, true, false, true]);
+        setCapacitySelectedField([false, false, true, false]);
+        break;
+      case roomField.children[1].selected:
+        setCapacityDisabledField([true, false, false, true]);
+        setCapacitySelectedField([false, true, false, false]);
+        break;
+      case roomField.children[2].selected:
+        setCapacityDisabledField([false, false, false, true]);
+        setCapacitySelectedField([true, false, false, false]);
+        break;
+      case roomField.children[3].selected:
+        setCapacityDisabledField([true, true, true, false]);
+        setCapacitySelectedField([false, false, false, true]);
+        break;
     }
   };
 
@@ -68,77 +74,67 @@
   };
 
   var setCheckInTime = function () {
-    if (checkinField.children[0].selected) {
-      setTimeSelectedField(checkoutField, true, false, false);
-    } else if (checkinField.children[1].selected) {
-      setTimeSelectedField(checkoutField, false, true, false);
-    } else if (checkinField.children[2].selected) {
-      setTimeSelectedField(checkoutField, false, false, true);
+    switch (true) {
+      case checkinField.children[0].selected:
+        setTimeSelectedField(checkoutField, true, false, false);
+        break;
+      case checkinField.children[1].selected:
+        setTimeSelectedField(checkoutField, false, true, false);
+        break;
+      case checkinField.children[2].selected:
+        setTimeSelectedField(checkoutField, false, false, true);
+        break;
     }
   };
 
   var setCheckOutTime = function () {
-    if (checkoutField.children[0].selected) {
-      setTimeSelectedField(checkinField, true, false, false);
-    } else if (checkoutField.children[1].selected) {
-      setTimeSelectedField(checkinField, false, true, false);
-    } else if (checkoutField.children[2].selected) {
-      setTimeSelectedField(checkinField, false, false, true);
+    switch (true) {
+      case checkoutField.children[0].selected:
+        setTimeSelectedField(checkoutField, true, false, false);
+        break;
+      case checkoutField.children[1].selected:
+        setTimeSelectedField(checkoutField, false, true, false);
+        break;
+      case checkoutField.children[2].selected:
+        setTimeSelectedField(checkoutField, false, false, true);
+        break;
     }
-  };
-
-  var sendForm = function () {
-    var features = [];
-    var locations = addressField.value.split(', ');
-
-    for (var i = 0; i < featuresField.length; i++) {
-      if (featuresField[i].checked) {
-        features.push(featuresField[i].value);
-      }
-    }
-
-    var data = {
-      'author': {
-        'avatar': '',
-      },
-
-      'offer': {
-        'title': titleField.value,
-        'address': addressField.value,
-        'price': priceField.value,
-        'type': typeField.value,
-        'rooms': roomField.value,
-        'guests': capacityField.value,
-        'checkin': checkinField.value,
-        'checkout': checkoutField.value,
-        'features': features,
-        'description': descriptionField.value,
-        'photos': ''
-      },
-
-      'location': {
-        'x': locations[0],
-        'y': locations[0]
-      }
-    };
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://js.dump.academy/keksobooking', true);
-    xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-    xhr.onreadystatechange = function () {
-      if (this.readyState !== 4) {
-        return;
-      }
-    };
-    xhr.send(data);
   };
 
   var setValidation = function () {
-    setAddressValidation();
     setCapacityValidation();
     setTitleValidation();
     setTypeValidation();
     setPriceField();
+  };
+
+  var errDomElement = function (str) {
+    var modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.position = 'absolute';
+    modal.style.padding = '5px';
+    modal.style.width = '300px';
+    modal.style.height = '100px';
+    modal.style.left = '40vw';
+    modal.style.bottom = '-750px';
+    modal.style.backgroundColor = 'grey';
+    modal.style.textAlign = 'center';
+    var text = document.createElement('p');
+    text.textContent = str;
+    text.style.margin = '0';
+    text.style.lineHeight = '45px';
+    modal.appendChild(text);
+    var close = document.createElement('button');
+    close.textContent = 'OK';
+    modal.appendChild(close);
+    form.appendChild(modal);
+
+    var onModalClick = function () {
+      form.removeChild(modal);
+      close.removeEventListener('click', onModalClick);
+    };
+
+    close.addEventListener('click', onModalClick);
   };
 
   var titleField = document.querySelector('#title');
@@ -149,19 +145,28 @@
   var priceField = document.querySelector('#price');
   var checkinField = document.querySelector('#timein');
   var checkoutField = document.querySelector('#timeout');
-  var descriptionField = document.querySelector('#description');
-  var featuresField = document.querySelectorAll('.feature__checkbox');
-  var adForm = document.querySelector('.ad-form');
+
+  var form = document.querySelector('.ad-form');
 
   roomField.addEventListener('change', setCapacityValidation);
   typeField.addEventListener('change', setTypeValidation);
   checkinField.addEventListener('change', setCheckInTime);
   checkoutField.addEventListener('change', setCheckOutTime);
-  adForm.addEventListener('submit', sendForm);
 
   setValidation();
 
   window.form = {
     addressField: addressField
   };
+
+  var onError = function (message) {
+    var err = window.errModule.message(message);
+    errDomElement(err);
+  };
+
+  var onSuccess = function () {
+    form.reset();
+  };
+
+  window.backend.upload(form, 'https://js.dump.academy/keksobookin', onSuccess, onError);
 })();
