@@ -5,7 +5,7 @@
     win: function (elem, str) {
       var modal = document.createElement('div');
       modal.className = 'modal';
-      modal.style.position = 'absolute';
+      modal.style.position = 'fixed';
       modal.style.padding = '5px';
       modal.style.width = '300px';
       modal.style.height = '100px';
@@ -22,7 +22,6 @@
       var close = document.createElement('button');
       close.textContent = 'OK';
       modal.appendChild(close);
-      elem.style.position = 'relative';
       elem.appendChild(modal);
 
       var onModalClick = function () {
