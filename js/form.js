@@ -108,35 +108,6 @@
     setPriceField();
   };
 
-  var errDomElement = function (str) {
-    var modal = document.createElement('div');
-    modal.className = 'modal';
-    modal.style.position = 'absolute';
-    modal.style.padding = '5px';
-    modal.style.width = '300px';
-    modal.style.height = '100px';
-    modal.style.left = '40vw';
-    modal.style.bottom = '-750px';
-    modal.style.backgroundColor = 'grey';
-    modal.style.textAlign = 'center';
-    var text = document.createElement('p');
-    text.textContent = str;
-    text.style.margin = '0';
-    text.style.lineHeight = '45px';
-    modal.appendChild(text);
-    var close = document.createElement('button');
-    close.textContent = 'OK';
-    modal.appendChild(close);
-    form.appendChild(modal);
-
-    var onModalClick = function () {
-      form.removeChild(modal);
-      close.removeEventListener('click', onModalClick);
-    };
-
-    close.addEventListener('click', onModalClick);
-  };
-
   var titleField = document.querySelector('#title');
   var addressField = document.querySelector('#address');
   var typeField = document.querySelector('#type');
@@ -161,7 +132,7 @@
 
   var onError = function (message) {
     var err = window.errModule.message(message);
-    errDomElement(err);
+    window.modal.win(form, err);
   };
 
   var onSuccess = function () {
