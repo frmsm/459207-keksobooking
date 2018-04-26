@@ -4,6 +4,8 @@
   window.errModule = {
     message: function (str) {
       switch (str) {
+        case 200:
+          return 'Данные отправлены';
         case 400:
           return 'Cервер обнаружил в запросе клиента синтаксическую ошибку';
         case 401:
