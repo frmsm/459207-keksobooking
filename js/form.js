@@ -139,5 +139,5 @@
     form.reset();
   };
 
-  window.backend.upload(form, 'https://js.dump.academy/keksobookin', onSuccess, onError);
+  window.backend.upload(form, 'https://js.dump.academy/keksobooking', onSuccess, onError);
 })();
