@@ -135,9 +135,11 @@
     window.modal.win(form, err);
   };
 
-  var onSuccess = function () {
+  var onSuccess = function (message) {
     form.reset();
+    var modalMessage = window.errModule.message(message);
+    window.modal.win(form, modalMessage);
   };
 
-  window.backend.upload(form, 'https://js.dump.academy/keksobookin', onSuccess, onError);
+  window.backend.upload(form, 'https://js.dump.academy/keksobooking', onSuccess, onError);
 })();

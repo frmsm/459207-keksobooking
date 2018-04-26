@@ -40,7 +40,7 @@
         xhr.open('POST', url, true);
         xhr.addEventListener('load', function () {
           if (xhr.status === 200) {
-            onSuccess(xhr.response);
+            onSuccess(xhr.status);
           } else {
             onError(xhr.status);
           }
