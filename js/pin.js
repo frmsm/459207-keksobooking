@@ -1,43 +1,21 @@
 'use strict';
 
 (function () {
+  var mapPins = document.querySelector('.map__pins');
   window.pin = {
     mainPin: function (documentBlock) {
-      var PIN_HEIGHT = 84;
-      var PIN_WIDTH = 62;
-      var BORDER_TOP = 150;
-      var BORDER_BOTTOM = 500;
-      var BORDER_LEFT = 300;
-      var BORDER_RIGHT = 900;
 
-      var mapPins = document.querySelector('.map__pins');
-      mapPins.appendChild(documentBlock); // добавление на карту пинов и карточек
+      mapPins.appendChild(documentBlock);
 
-      var mapBlock = document.querySelector('.map');
-      var mainPin = document.querySelector('.map__pin--main');
-      var adForm = document.querySelector('.ad-form');
+      var currentPopUp;
 
-      var getMainPinLocation = function () { // получение расположения главного пина
-        return (mainPin.offsetLeft + PIN_WIDTH / 2) + ', '
-          + (mainPin.offsetTop + PIN_HEIGHT);
-      };
-
-      var displayMapPins = function () { // отображение пинов
-        var mapPinsArr = document.querySelectorAll('.map__pin');
-        for (var i = 1; i < mapPinsArr.length; i++) {
-          mapPinsArr[i].style.display = 'block';
-        }
-      };
-
-      var currentPopUp; // карточка
-
-      var hidePopUp = function () { // скрыть карточку
+      var hidePopUp = function () {
         if (currentPopUp) {
           currentPopUp.style.display = 'none';
         }
       };
 
-      var onMapPinClick = function (e) { // обработка клика на пин
+      var onMapPinClick = function (e) {
         var target = e.target;
         if (target.tagName === 'IMG' || target.className === 'map__pin') {
           if (target.className === 'map__pin map__pin--main'
@@ -57,7 +35,7 @@
         mapPins.addEventListener('click', onPopUpCloseClick);
       };
 
-      var onPopUpCloseClick = function (e) { // закрытие карточки
+      var onPopUpCloseClick = function (e) {
         var target = e.target;
         if (target.className !== 'popup__close') {
           return;
@@ -67,75 +45,20 @@
       };
 
       mapPins.addEventListener('click', onMapPinClick);
+    },
 
-      // Обработка движения главного пина
-      var onMouseDown = function (e) {
-        e.preventDefault();
+    displayMapPins: function () {
+      var mapPinsArr = document.querySelectorAll('.map__pin');
+      for (var i = 1; i < mapPinsArr.length; i++) {
+        mapPinsArr[i].style.display = 'block';
+      }
+    },
 
-        mapBlock.classList.remove('map--faded');
-        adForm.classList.remove('ad-form--disabled');
-
-        var startCoords = {
-          x: e.clientX,
-          y: e.clientY
-        };
-
-        var onMouseMove = function (moveEvt) {
-          moveEvt.preventDefault();
-
-
-          var shift = { // перемещение по карте
-            x: startCoords.x - moveEvt.clientX,
-            y: startCoords.y - moveEvt.clientY
-          };
-
-          startCoords = {
-            x: moveEvt.clientX,
-            y: moveEvt.clientY
-          };
-
-          if ((mainPin.offsetTop - shift.y + PIN_HEIGHT) >= BORDER_BOTTOM) { // обработка пграниц
-            mainPin.style.top = (BORDER_BOTTOM - PIN_HEIGHT) + 'px';
-            startCoords.y = mapPins.getBoundingClientRect().top + BORDER_BOTTOM - PIN_HEIGHT / 2;
-          } else if ((mainPin.offsetTop - shift.y + PIN_HEIGHT) < BORDER_TOP) {
-            mainPin.style.top = (BORDER_TOP - PIN_HEIGHT) + 'px';
-            startCoords.y = mapPins.getBoundingClientRect().top + BORDER_TOP - PIN_HEIGHT / 2;
-          } else {
-            mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-          }
-
-          if ((mainPin.offsetLeft - shift.x + PIN_WIDTH / 2) > BORDER_RIGHT) {
-            mainPin.style.left = (BORDER_RIGHT - PIN_WIDTH / 2) + 'px';
-            startCoords.x = BORDER_RIGHT + mapPins.getBoundingClientRect().left;
-          } else if ((mainPin.offsetLeft - shift.x + PIN_WIDTH / 2) < BORDER_LEFT) {
-            mainPin.style.left = (BORDER_LEFT - PIN_WIDTH / 2) + 'px';
-            startCoords.x = BORDER_LEFT + mapPins.getBoundingClientRect().left;
-          } else {
-            mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-          }
-        };
-
-        var onWheelMove = function (wheelEvt) { // запрет прокрутки во захвата
-          wheelEvt.preventDefault();
-        };
-
-        var onMouseUp = function (upEvt) {
-          upEvt.preventDefault();
-
-          displayMapPins();
-          window.form.addressField.value = getMainPinLocation();
-
-          document.removeEventListener('mousewheel', onWheelMove);
-          mapBlock.removeEventListener('mousemove', onMouseMove);
-          mapBlock.removeEventListener('mouseup', onMouseUp);
-        };
-
-        document.addEventListener('mousewheel', onWheelMove);
-        mapBlock.addEventListener('mousemove', onMouseMove);
-        mapBlock.addEventListener('mouseup', onMouseUp);
-      };
-
-      mainPin.addEventListener('mousedown', onMouseDown); // обработчик событий движения главного пина
+    clearMap: function () {
+      var ads = document.querySelector('.ads');
+      if (ads) {
+        mapPins.removeChild(ads);
+      }
     }
   };
 })();

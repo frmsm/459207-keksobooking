@@ -8,7 +8,6 @@
       var mapCard = mapTemplate.querySelector('.map__card'); // карточка
       var mapPin = mapTemplate.querySelector('.map__pin'); // пин
       var setupFragment = document.createDocumentFragment(); // фрагмент для добавления в разметку
-      // var offers = window.data.getOffers;
 
       for (var i = 0; i < offers.length; i++) { // цикл ввода данных в карточку
         var cardFragment = mapCard.cloneNode(true); // клонирование карточки
@@ -23,19 +22,11 @@
         var cardDescription = cardFragment.querySelector('.popup__description');
         var cardPhotos = cardFragment.querySelector('.popup__photos');
 
-        var translateType = function (type) {
-          switch (type) {
-            case 'flat':
-              return 'Квартира';
-            case 'house':
-              return 'Дом';
-            case 'bungalo':
-              return 'Лачуга';
-            case 'palace':
-              return 'Дворец';
-            default:
-              return 'none';
-          }
+        var houseType = {
+          'flat': 'Квартира',
+          'house': 'Дом',
+          'bungalo': 'Лачуга',
+          'palace': 'Дворец'
         };
 
         while (cardFeatures.firstChild) { // удаление всех дочерних элементов в features
@@ -50,7 +41,7 @@
         cardTitle.textContent = offers[i].offer.title;
         cardAddress.textContent = offers[i].offer.address + ' ';
         cardPrice.textContent = offers[i].offer.price + '₽/Ночь';
-        cardType.textContent = translateType(offers[i].offer.type);
+        cardType.textContent = houseType[offers[i].offer.type];
         cardCapacity.textContent = offers[i].offer.rooms + ' комнаты ' + 'для ' +
           offers[i].offer.guests + ' гостей';
         cardTime.textContent = 'Заезд полсле ' + offers[i].offer.checkin +
@@ -85,7 +76,10 @@
         setupFragment.appendChild(cardFragment); // добавление в фрагмент карточки
         setupFragment.appendChild(pinFragment); // добавление в фрагмент карточки
       }
-      window.pin.mainPin(setupFragment);
+      var ads = document.createElement('div');
+      ads.className = 'ads';
+      ads.appendChild(setupFragment);
+      window.pin.mainPin(ads);
     }
   };
 })();
