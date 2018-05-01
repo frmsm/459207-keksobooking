@@ -9,7 +9,9 @@
       var mapPin = mapTemplate.querySelector('.map__pin'); // пин
       var setupFragment = document.createDocumentFragment(); // фрагмент для добавления в разметку
 
-      for (var i = 0; i < offers.length; i++) { // цикл ввода данных в карточку
+      var pinsCount = (offers.length < 5) ? offers.length : 5;
+
+      for (var i = 0; i < pinsCount; i++) { // цикл ввода данных в карточку
         var cardFragment = mapCard.cloneNode(true); // клонирование карточки
         var cardAvatar = cardFragment.querySelector('.popup__avatar');
         var cardTitle = cardFragment.querySelector('.popup__title');

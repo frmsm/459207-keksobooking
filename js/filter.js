@@ -8,6 +8,8 @@
   var mapFilers = document.querySelector('.map__filters');
   var housingFeatures = document.querySelectorAll('.map__checkbox');
 
+  var lastTimeout;
+
   var onHouseTypeChange = function (ad) {
     if (housingType[housingType.selectedIndex].value === 'any') {
       return ad;
@@ -51,10 +53,7 @@
     return true;
   };
 
-  var onFilterChange = function () {
-    if (!window.data.offers) {
-      return;
-    }
+  var updateAds = function () {
     var ads = window.data.offers.slice();
     var filteredAds =
       ads.filter(onHouseTypeChange)
@@ -65,6 +64,17 @@
     window.pin.clearMap();
     window.card.makeCard(filteredAds);
     window.pin.displayMapPins();
+  };
+
+  var onFilterChange = function () {
+    if (!window.data.offers) {
+      return;
+    }
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+      lastTimeout = null;
+    }
+    lastTimeout = window.setTimeout(updateAds, 50);
   };
 
   mapFilers.addEventListener('change', onFilterChange);

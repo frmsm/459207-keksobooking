@@ -71,8 +71,6 @@
   };
 
   var onResetClick = function () {
-    roomField.selectedIndex = 0;
-    capacityField.selectedIndex = 2;
     changePriceField(priceType['flat']);
   };
 
