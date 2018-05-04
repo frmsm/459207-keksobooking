@@ -17,21 +17,15 @@
     priceField.min = minPrice;
   };
 
+  var priceType = {
+    'flat': '1000',
+    'bungalo': '0',
+    'house': '5000',
+    'palace': '10000'
+  };
+
   var setTypeValidation = function () { // валидация цены и типа
-    switch (true) {
-      case typeField.children[0].selected:
-        changePriceField('1000');
-        break;
-      case typeField.children[1].selected:
-        changePriceField('0');
-        break;
-      case typeField.children[2].selected:
-        changePriceField('5000');
-        break;
-      case typeField.children[3].selected:
-        changePriceField('10000');
-        break;
-    }
+    changePriceField(priceType[typeField.options[typeField.selectedIndex].value]);
   };
 
   var setCapacityDisabledField = function (disable) {
@@ -40,65 +34,33 @@
     }
   };
 
-  var setCapacitySelectedField = function (select) {
-    for (var i = 0; i < capacityField.length; i++) {
-      capacityField.children[i].selected = select[i];
-    }
-  };
-
   var setCapacityValidation = function () {
-    switch (true) {
-      case roomField.children[0].selected:
+    switch (roomField.selectedIndex) {
+      case 0:
         setCapacityDisabledField([true, true, false, true]);
-        setCapacitySelectedField([false, false, true, false]);
+        capacityField.selectedIndex = 2;
         break;
-      case roomField.children[1].selected:
+      case 1:
         setCapacityDisabledField([true, false, false, true]);
-        setCapacitySelectedField([false, true, false, false]);
+        capacityField.selectedIndex = 1;
         break;
-      case roomField.children[2].selected:
+      case 2:
         setCapacityDisabledField([false, false, false, true]);
-        setCapacitySelectedField([true, false, false, false]);
+        capacityField.selectedIndex = 0;
         break;
-      case roomField.children[3].selected:
+      case 3:
         setCapacityDisabledField([true, true, true, false]);
-        setCapacitySelectedField([false, false, false, true]);
+        capacityField.selectedIndex = 3;
         break;
     }
-  };
-
-  var setTimeSelectedField = function (time, select1, select2, select3) {
-    time.children[0].selected = select1;
-    time.children[1].selected = select2;
-    time.children[2].selected = select3;
   };
 
   var setCheckInTime = function () {
-    switch (true) {
-      case checkinField.children[0].selected:
-        setTimeSelectedField(checkoutField, true, false, false);
-        break;
-      case checkinField.children[1].selected:
-        setTimeSelectedField(checkoutField, false, true, false);
-        break;
-      case checkinField.children[2].selected:
-        setTimeSelectedField(checkoutField, false, false, true);
-        break;
-    }
+    checkoutField.selectedIndex = checkinField.selectedIndex;
   };
 
   var setCheckOutTime = function () {
-    switch (true) {
-      case checkoutField.children[0].selected:
-        setTimeSelectedField(checkoutField, true, false, false);
-        break;
-      case checkoutField.children[1].selected:
-        setTimeSelectedField(checkoutField, false, true, false);
-        break;
-      case checkoutField.children[2].selected:
-        setTimeSelectedField(checkoutField, false, false, true);
-        break;
-    }
+    checkinField.selectedIndex = checkoutField.selectedIndex;
   };
 
   var setValidation = function () {
@@ -106,6 +68,10 @@
     setTitleValidation();
     setTypeValidation();
     setPriceField();
+  };
+
+  var onResetClick = function () {
+    changePriceField(priceType['flat']);
   };
 
   var titleField = document.querySelector('#title');
@@ -119,25 +85,26 @@
 
   var form = document.querySelector('.ad-form');
 
+  setValidation();
+
   roomField.addEventListener('change', setCapacityValidation);
   typeField.addEventListener('change', setTypeValidation);
   checkinField.addEventListener('change', setCheckInTime);
   checkoutField.addEventListener('change', setCheckOutTime);
-
-  setValidation();
+  form.addEventListener('reset', onResetClick);
 
   window.form = {
     addressField: addressField
   };
 
   var onError = function (message) {
-    var err = window.errModule.message(message);
+    var err = window.report.message(message);
     window.modal.win(form, err);
   };
 
   var onSuccess = function (message) {
     form.reset();
-    var modalMessage = window.errModule.message(message);
+    var modalMessage = window.report.message(message);
     window.modal.win(form, modalMessage);
   };
 

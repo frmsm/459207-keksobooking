@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  window.errModule = {
+  window.report = {
     message: function (str) {
       switch (str) {
         case 200:
