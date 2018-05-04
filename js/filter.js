@@ -74,7 +74,7 @@
       window.clearTimeout(lastTimeout);
       lastTimeout = null;
     }
-    lastTimeout = window.setTimeout(updateAds, 50);
+    lastTimeout = window.setTimeout(updateAds, 500);
   };
 
   mapFilers.addEventListener('change', onFilterChange);
