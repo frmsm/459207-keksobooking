@@ -9,7 +9,7 @@
   };
 
   var onSuccess = function (data) {
-    window.card.makeCard(data);
+    window.card.render(data);
 
     window.data = {
       offers: data

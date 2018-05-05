@@ -8,23 +8,42 @@
   var BORDER_LEFT = 300;
   var BORDER_RIGHT = 900;
 
+  var MAIN_PIN_DEFAULT_LEFT_POS = 570;
+  var MAIN_PIN_DEFAULT_TOP_POS = 375;
+
   var mapPins = document.querySelector('.map__pins');
 
   var mapBlock = document.querySelector('.map');
   var mainPin = document.querySelector('.map__pin--main');
-  var adForm = document.querySelector('.ad-form');
 
   var getMainPinLocation = function () { // получение расположения главного пина
     return (mainPin.offsetLeft + PIN_WIDTH / 2) + ', '
       + (mainPin.offsetTop + PIN_HEIGHT);
   };
 
-  // Обработка движения главного пина
+  var setMapVisibility = function (isFormVisible) {
+    if (isFormVisible) {
+      mapBlock.classList.remove('map--faded');
+      return;
+    }
+    mapBlock.classList.add('map--faded');
+    setMainPinDefault();
+  };
+
+  var setMainPinDefault = function () {
+    mainPin.style.left = MAIN_PIN_DEFAULT_LEFT_POS + 'px';
+    mainPin.style.top = MAIN_PIN_DEFAULT_TOP_POS + 'px';
+    window.form.addressField.value = getMainPinLocation();
+  };
+
+  window.form.addressField.value = getMainPinLocation();
+
   var onMouseDown = function (e) {
     e.preventDefault();
 
-    mapBlock.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
+    setMapVisibility(true);
+    window.form.toggle(true);
+    window.form.disableFields(false);
 
     var startCoords = {
       x: e.clientX,
@@ -73,7 +92,7 @@
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
-      window.pin.displayMapPins();
+      window.pin.display();
       window.form.addressField.value = getMainPinLocation();
 
       document.removeEventListener('mousewheel', onWheelMove);
@@ -87,4 +106,8 @@
   };
 
   mainPin.addEventListener('mousedown', onMouseDown); // обработчик событий движения главного пина
+
+  window.mainPin = {
+    mapVisibility: setMapVisibility
+  };
 })();

@@ -1,9 +1,10 @@
 'use strict';
 
 (function () {
+  var ESC_KEY_CODE = 27;
   var mapPins = document.querySelector('.map__pins');
   window.pin = {
-    mainPin: function (documentBlock) {
+    set: function (documentBlock) {
 
       mapPins.appendChild(documentBlock);
 
@@ -33,6 +34,15 @@
           }
         }
         mapPins.addEventListener('click', onPopUpCloseClick);
+        mapPins.addEventListener('keydown', onPopUpEscKeyPressed);
+      };
+
+      var onPopUpEscKeyPressed = function (e) {
+        if (e.keyCode === ESC_KEY_CODE) {
+          mapPins.removeEventListener('click', onPopUpCloseClick);
+          mapPins.removeEventListener('keydown', onPopUpEscKeyPressed);
+          e.target.previousSibling.style.display = 'none';
+        }
       };
 
       var onPopUpCloseClick = function (e) {
@@ -41,13 +51,14 @@
           return;
         }
         mapPins.removeEventListener('click', onPopUpCloseClick);
+        mapPins.removeEventListener('keydown', onPopUpEscKeyPressed);
         target.parentNode.style.display = 'none';
       };
 
       mapPins.addEventListener('click', onMapPinClick);
     },
 
-    displayMapPins: function () {
+    display: function () {
       var mapPinsArr = document.querySelectorAll('.map__pin');
       for (var i = 1; i < mapPinsArr.length; i++) {
         mapPinsArr[i].style.display = 'block';

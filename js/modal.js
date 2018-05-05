@@ -4,17 +4,17 @@
   window.modal = {
     win: function (elem, str) {
       var modal = document.createElement('div');
+      var text = document.createElement('p');
       modal.className = 'modal';
       modal.style.position = 'fixed';
       modal.style.padding = '5px';
       modal.style.width = '300px';
-      modal.style.height = '100px';
+      modal.style.height = (70 + text.height) + 'px';
       modal.style.left = '40vw';
       modal.style.top = '300px';
       modal.style.backgroundColor = 'grey';
       modal.style.textAlign = 'center';
       modal.style.zIndex = '100';
-      var text = document.createElement('p');
       text.textContent = str;
       text.style.margin = '0';
       text.style.lineHeight = '45px';
