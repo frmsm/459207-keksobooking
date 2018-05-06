@@ -822,6 +822,36 @@ fieldset {
   border-radius: 5px;
 }
 
+.ad-form__photo--delete {
+  position: absolute;
+  top: 5px;
+  right: 12px;
+  width: 5px;
+  height: 5px;
+  cursor: pointer;
+}
+
+.ad-form__photo--delete:before,
+.ad-form__photo--delete:after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 10px;
+  height: 4px;
+  background: #ff6d51;
+}
+
+.ad-form__photo--delete:before {
+  webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.ad-form__photo--delete:after {
+  webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
 .ad-form__element--submit {
   -ms-flex-preferred-size: 100%;
       flex-basis: 100%;
@@ -879,7 +909,6 @@ fieldset {
   -webkit-box-shadow: 0 0 2px 2px #ff6547;
           box-shadow: 0 0 2px 2px #ff6547;
 }
-
 
 /* Футер */
 

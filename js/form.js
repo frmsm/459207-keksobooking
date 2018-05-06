@@ -120,6 +120,7 @@
     window.mainPin.mapVisibility(false);
     window.filter.default();
     window.card.render(window.data.offers);
+    window.photo.default();
   };
 
   setValidation();

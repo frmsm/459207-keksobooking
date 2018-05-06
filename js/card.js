@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var MAX_ADS = 5;
+
   var houseType = {
     'flat': 'Квартира',
     'house': 'Дом',
@@ -28,9 +30,9 @@
 
       var ads = offers.slice();
 
-      if (ads.length > 5) {
+      if (ads.length > MAX_ADS) {
         shuffleArray(ads);
-        ads.splice(5);
+        ads.splice(MAX_ADS);
       }
 
       var renderAds = function (ad) {
