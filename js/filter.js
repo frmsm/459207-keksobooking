@@ -13,10 +13,6 @@
 
   var lastTimeout;
 
-  var onHouseTypeChange = function (ad) {
-    return onTypeChange(housingType[housingType.selectedIndex].value, ad.offer.type);
-  };
-
   var onPriceTypeChange = function (ad) {
     switch (housingPrice[housingPrice.selectedIndex].value) {
       case 'low':
@@ -30,14 +26,6 @@
     }
   };
 
-  var onRoomsTypeChange = function (ad) {
-    return onTypeChange(housingRooms[housingRooms.selectedIndex].value, ad.offer.rooms);
-  };
-
-  var onGuestTypeChange = function (ad) {
-    return onTypeChange(housingGuests[housingGuests.selectedIndex].value, ad.offer.guests);
-  };
-
   var onFeatureChange = function (ad) {
     for (var i = 0; i < housingFeatures.length; i++) {
       if (housingFeatures[i].checked && ad.offer.features.indexOf(housingFeatures[i].value) < 0) {
@@ -45,6 +33,26 @@
       }
     }
     return true;
+  };
+
+  var onChangeFilterType = function (type, ad) {
+    var targetSelector;
+
+    switch (type) {
+      case 'type':
+        targetSelector = housingType;
+        break;
+      case 'rooms':
+        targetSelector = housingRooms;
+        break;
+      case 'guests':
+        targetSelector = housingGuests;
+        break;
+      default:
+        break;
+    }
+
+    return onTypeChange(targetSelector[targetSelector.selectedIndex].value, ad.offer[type]);
   };
 
   var onTypeChange = function (valueToCompare, ad) {
@@ -61,10 +69,10 @@
   var updateAds = function () {
     var ads = window.data.offers.slice();
     var filteredAds =
-      ads.filter(onHouseTypeChange)
+      ads.filter(onChangeFilterType.bind(null, 'type'))
           .filter(onPriceTypeChange)
-          .filter(onRoomsTypeChange)
-          .filter(onGuestTypeChange)
+          .filter(onChangeFilterType.bind(null, 'rooms'))
+          .filter(onChangeFilterType.bind(null, 'guests'))
           .filter(onFeatureChange);
     window.pin.clearMap();
     window.card.render(filteredAds);
